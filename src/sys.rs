@@ -363,6 +363,11 @@ mod default {
         #[rust_name = "user_op_names"]
         fn getUserOpNamesProxy(self: &SleighProxy) -> UniquePtr<CxxVector<CxxString>>;
 
+        /// Discard parser contexts cached by instruction address without
+        /// decoding the Sleigh specification again.
+        #[rust_name = "clear_cache"]
+        fn clearCache(self: Pin<&mut SleighProxy>, processor_spec: &DocumentStorage) -> Result<()>;
+
         #[rust_name = "parse_processor_config"]
         fn parseProcessorConfig(self: Pin<&mut SleighProxy>, store: &DocumentStorage)
         -> Result<()>;
