@@ -357,6 +357,17 @@ mod default {
         #[rust_name = "all_register_names"]
         fn getAllRegistersProxy(self: &SleighProxy) -> UniquePtr<CxxVector<RegisterVarnodeName>>;
 
+        // The user-defined p-code operation names, in the order the language
+        // declares them, so that the index a CALLOTHER carries can be resolved
+        // to the operation it names.
+        #[rust_name = "user_op_names"]
+        fn getUserOpNamesProxy(self: &SleighProxy) -> UniquePtr<CxxVector<CxxString>>;
+
+        /// Discard parser contexts cached by instruction address without
+        /// decoding the Sleigh specification again.
+        #[rust_name = "clear_cache"]
+        fn clearCache(self: Pin<&mut SleighProxy>, processor_spec: &DocumentStorage) -> Result<()>;
+
         #[rust_name = "parse_processor_config"]
         fn parseProcessorConfig(self: Pin<&mut SleighProxy>, store: &DocumentStorage)
         -> Result<()>;

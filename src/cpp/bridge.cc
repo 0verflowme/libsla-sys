@@ -155,6 +155,26 @@ std::unique_ptr<std::vector<RegisterVarnodeName>> SleighProxy::getAllRegistersPr
     return reglist;
 }
 
+/// The names of the language's user-defined p-code operations, indexed by the
+/// identifier a CALLOTHER carries. `SleighBase` already keeps this list; without
+/// an accessor a caller sees only the index, which names nothing on its own.
+std::unique_ptr<std::vector<std::string>> SleighProxy::getUserOpNamesProxy() const {
+    auto names = std::unique_ptr<std::vector<std::string>>(new std::vector<std::string>());
+    getUserOpNames(*names);
+    return names;
+}
+
+/// Discard every parser context cached by instruction address while retaining
+/// the decoded Sleigh specification. Ghidra's public reset path rebuilds the
+/// context and disassembly caches without decoding the specification again.
+void SleighProxy::clearCache(const DocumentStorage &processorSpec) {
+    context = construct_new_context();
+    reset(loader.get(), context.get());
+    DocumentStorage store;
+    initialize(store);
+    parseProcessorConfig(processorSpec);
+}
+
 void SleighProxy::initializeFromSla(const std::string &sla) {
     std::stringstream slaStream(sla);
 
